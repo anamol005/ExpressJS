@@ -1,4 +1,6 @@
 import {createThumbnail} from '../../middlewares/upload.js';
+import {authenticateToken} from '../../middlewares/authentication.js';
+
 import express from 'express';
 import multer from 'multer';
 
@@ -22,6 +24,10 @@ catRouter
 
 catRouter.route('/user/:id').get(getCatsByUserId);
 
-catRouter.route('/:id').get(getCatById).put(putCat).delete(deleteCat);
+catRouter
+  .route('/:id')
+  .get(getCatById)
+  .put(authenticateToken, putCat)
+  .delete(authenticateToken, deleteCat);
 
 export default catRouter;

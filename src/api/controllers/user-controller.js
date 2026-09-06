@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 import {
   listAllUsers,
   findUserById,
@@ -22,6 +24,8 @@ const getUserById = async (req, res) => {
 };
 
 const postUser = async (req, res) => {
+  req.body.password = bcrypt.hashSync(req.body.password, 10);
+
   const result = await addUser(req.body);
 
   if (result) {
@@ -35,6 +39,16 @@ const postUser = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
+  const loggedInUser = res.locals.user;
+
+  if (
+    loggedInUser.role !== 'admin' &&
+    loggedInUser.user_id !== Number(req.params.id)
+  ) {
+    res.sendStatus(403);
+    return;
+  }
+
   const result = await modifyUser(req.body, req.params.id);
 
   if (result) {
@@ -45,6 +59,16 @@ const putUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
+  const loggedInUser = res.locals.user;
+
+  if (
+    loggedInUser.role !== 'admin' &&
+    loggedInUser.user_id !== Number(req.params.id)
+  ) {
+    res.sendStatus(403);
+    return;
+  }
+
   const result = await removeUser(req.params.id);
 
   if (result) {
