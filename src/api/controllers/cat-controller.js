@@ -1,11 +1,19 @@
-import {addCat, findCatById, listAllCats} from '../models/cat-model.js';
+import {
+  addCat,
+  findCatById,
+  findCatsByUserId,
+  listAllCats,
+  modifyCat,
+  removeCat,
+} from '../models/cat-model.js';
 
-const getCat = (req, res) => {
-  res.json(listAllCats());
+const getCat = async (req, res) => {
+  const cats = await listAllCats();
+  res.json(cats);
 };
 
-const getCatById = (req, res) => {
-  const cat = findCatById(req.params.id);
+const getCatById = async (req, res) => {
+  const cat = await findCatById(req.params.id);
 
   if (cat) {
     res.json(cat);
@@ -14,7 +22,12 @@ const getCatById = (req, res) => {
   }
 };
 
-const postCat = (req, res) => {
+const getCatsByUserId = async (req, res) => {
+  const cats = await findCatsByUserId(req.params.id);
+  res.json(cats);
+};
+
+const postCat = async (req, res) => {
   console.log('Form data:', req.body);
   console.log('Uploaded file:', req.file);
 
@@ -28,7 +41,7 @@ const postCat = (req, res) => {
     filename: req.file.filename,
   };
 
-  const result = addCat(cat);
+  const result = await addCat(cat);
 
   res.status(201).json({
     message: 'New cat added.',
@@ -36,12 +49,24 @@ const postCat = (req, res) => {
   });
 };
 
-const putCat = (req, res) => {
-  res.json({message: 'Cat item updated.'});
+const putCat = async (req, res) => {
+  const result = await modifyCat(req.body, req.params.id);
+
+  if (result) {
+    res.json({message: 'Cat item updated.'});
+  } else {
+    res.sendStatus(404);
+  }
 };
 
-const deleteCat = (req, res) => {
-  res.json({message: 'Cat item deleted.'});
+const deleteCat = async (req, res) => {
+  const result = await removeCat(req.params.id);
+
+  if (result) {
+    res.json({message: 'Cat item deleted.'});
+  } else {
+    res.sendStatus(404);
+  }
 };
 
-export {getCat, getCatById, postCat, putCat, deleteCat};
+export {getCat, getCatById, getCatsByUserId, postCat, putCat, deleteCat};

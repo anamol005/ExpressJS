@@ -6,3 +6,6 @@ node_modules
 # ignore content of uploads folder
 uploads/*
 !uploads/.gitkeep
+
+# database credentials
+.env
