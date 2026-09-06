@@ -1,17 +1,19 @@
 const catItems = [
   {
-    cat_id: 1,
-    name: 'Milo',
-    birthdate: '2022-05-15',
-    weight: 4.5,
-    owner: 'Anamol',
+    cat_id: 9592,
+    cat_name: 'Anamol',
+    weight: 11,
+    owner: 3609,
+    filename: 'anamol.jpg',
+    birthdate: '2021-10-12',
   },
   {
-    cat_id: 2,
-    name: 'Luna',
-    birthdate: '2021-08-20',
-    weight: 3.8,
-    owner: 'Manik',
+    cat_id: 9590,
+    cat_name: 'Sandesh',
+    weight: 8,
+    owner: 3602,
+    filename: 'sandesh.jpg',
+    birthdate: '2021-10-12',
   },
 ];
 
@@ -24,19 +26,20 @@ const findCatById = (id) => {
 };
 
 const addCat = (cat) => {
-  const newId = catItems.length + 1;
+  const {cat_name, weight, owner, filename, birthdate} = cat;
 
-  const newCat = {
+  const newId = catItems[0].cat_id + 1;
+
+  catItems.unshift({
     cat_id: newId,
-    name: cat.name,
-    birthdate: cat.birthdate,
-    weight: cat.weight,
-    owner: cat.owner,
-  };
+    cat_name,
+    weight,
+    owner,
+    filename,
+    birthdate,
+  });
 
-  catItems.push(newCat);
-
-  return newCat;
+  return {cat_id: newId};
 };
 
 export {listAllCats, findCatById, addCat};

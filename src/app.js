@@ -6,11 +6,12 @@ const app = express();
 app.use('/public', express.static('public'));
 
 app.use(express.json());
-
-app.use('/api/v1', api);
+app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
   res.send('Welcome to my REST API!');
 });
+
+app.use('/api/v1', api);
 
 export default app;

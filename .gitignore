@@ -2,3 +2,7 @@
 .idea
 node_modules
 .DS_Store
+
+# ignore content of uploads folder
+uploads/*
+!uploads/.gitkeep

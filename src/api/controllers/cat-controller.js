@@ -1,6 +1,6 @@
-import {listAllCats, findCatById, addCat} from '../models/cat-model.js';
+import {addCat, findCatById, listAllCats} from '../models/cat-model.js';
 
-const getCats = (req, res) => {
+const getCat = (req, res) => {
   res.json(listAllCats());
 };
 
@@ -15,10 +15,25 @@ const getCatById = (req, res) => {
 };
 
 const postCat = (req, res) => {
-  const cat = addCat(req.body);
+  console.log('Form data:', req.body);
+  console.log('Uploaded file:', req.file);
 
-  res.status(201);
-  res.json(cat);
+  if (!req.file) {
+    res.status(400).json({message: 'Cat image is required.'});
+    return;
+  }
+
+  const cat = {
+    ...req.body,
+    filename: req.file.filename,
+  };
+
+  const result = addCat(cat);
+
+  res.status(201).json({
+    message: 'New cat added.',
+    result,
+  });
 };
 
 const putCat = (req, res) => {
@@ -29,4 +44,4 @@ const deleteCat = (req, res) => {
   res.json({message: 'Cat item deleted.'});
 };
 
-export {getCats, getCatById, postCat, putCat, deleteCat};
+export {getCat, getCatById, postCat, putCat, deleteCat};
