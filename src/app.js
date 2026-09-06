@@ -1,5 +1,6 @@
 import express from 'express';
 import api from './api/index.js';
+import {notFoundHandler, errorHandler} from './middlewares/error-handlers.js';
 
 const app = express();
 
@@ -13,5 +14,11 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1', api);
+
+// Handle routes that do not exist
+app.use(notFoundHandler);
+
+// Error handler must be the last middleware
+app.use(errorHandler);
 
 export default app;

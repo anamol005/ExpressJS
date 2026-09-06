@@ -6,7 +6,9 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (token == null) {
-    res.sendStatus(401);
+    const error = new Error('Unauthorized');
+    error.status = 401;
+    next(error);
     return;
   }
 
@@ -14,7 +16,9 @@ const authenticateToken = (req, res, next) => {
     res.locals.user = jwt.verify(token, process.env.JWT_SECRET);
     next();
   } catch {
-    res.status(403).send({message: 'invalid token'});
+    const error = new Error('Invalid token');
+    error.status = 403;
+    next(error);
   }
 };
 
